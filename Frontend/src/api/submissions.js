@@ -1,4 +1,5 @@
 import api from './axios';
+import { API_BASE_URL } from './config';
 
 /**
  * Multipart upload. The FormData is passed straight to axios with
@@ -37,5 +38,10 @@ export const reviewSubmission = async ({ id, decision, comment }) => {
   return data.data;
 };
 
-/** Attachments are served through an authorised route, never a static folder. */
-export const fileDownloadUrl = (filename) => `/api/submissions/file/${filename}`;
+/**
+ * Attachments are served through an authorised route, never a static folder.
+ * This is a plain <a href>, so it needs the absolute backend URL once the API
+ * lives on a different origin than the app.
+ */
+export const fileDownloadUrl = (filename) =>
+  `${API_BASE_URL}/submissions/file/${filename}`;

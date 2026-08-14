@@ -48,19 +48,21 @@ app.use('/api/notifications', notificationRoutes);
 app.use(notFound);
 app.use(errorHandler);
 
+
+app.get("/", (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "InternTrack Backend API is running"
+  });
+});
+
 const PORT = process.env.PORT || 5000;
 
 
 app.listen(PORT, "0.0.0.0" , () => {
   console.log(`Server running on port ${PORT}`);
 });
-/**
- * Express and Socket.IO share one HTTP server.
- *
- * The listen call MUST be on httpServer, not app — app.listen() creates a
- * second, separate server that Socket.IO is not attached to, and every
- * websocket handshake then fails or silently falls back to polling.
- */
+
 const httpServer = http.createServer(app);
 
 initSocket(httpServer);

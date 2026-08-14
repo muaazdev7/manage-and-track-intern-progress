@@ -1,11 +1,14 @@
 import axios from 'axios';
 
+import { API_BASE_URL } from './config';
+
 /**
- * baseURL is the relative '/api' so the Vite dev proxy handles it.
+ * baseURL comes from VITE_API_URL (see ./config.js). With it unset this is
+ * the relative '/api', which the Vite dev proxy handles.
  * withCredentials is what makes the browser send the httpOnly JWT cookie.
  */
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: API_BASE_URL,
   withCredentials: true,
   headers: { 'Content-Type': 'application/json' },
 });

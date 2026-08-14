@@ -43,7 +43,21 @@
       "Bash(curl -s -o /dev/null -w \"  /src/index.css          -> %{http_code}\\\\n\" \"http://localhost:5173/src/index.css\")",
       "Bash(curl -s -o /dev/null -w \"  /src/styles/nocturne.css-> %{http_code}\\\\n\" \"http://localhost:5173/src/styles/nocturne.css\")",
       "Bash(curl -s \"http://localhost:5173/src/styles/nocturne.css\")",
-      "Bash(curl -s \"http://localhost:5173/src/index.css\")"
+      "Bash(curl -s \"http://localhost:5173/src/index.css\")",
+      "PowerShell(foreach \\($p in 5000,5173\\) { $l = Get-NetTCPConnection -LocalPort $p -State Listen -ErrorAction SilentlyContinue; if \\($l\\) { Write-Output \"port $p : LISTENING \\(PID $\\($l[0].OwningProcess\\)\\)\" } else { Write-Output \"port $p : not listening\" } })",
+      "Bash(curl -s -o /dev/null -w \"  /api/health -> %{http_code}\\\\n\" http://localhost:5000/api/health)",
+      "Bash(curl -s -o /dev/null -w \"  /socket.io/?EIO=4&transport=polling -> %{http_code}\\\\n\" \"http://localhost:5000/socket.io/?EIO=4&transport=polling\")",
+      "PowerShell($l = Get-NetTCPConnection -LocalPort 5000 -State Listen; Get-CimInstance Win32_Process -Filter \"ProcessId = $\\($l[0].OwningProcess\\)\" | Select-Object ProcessId, CreationDate, CommandLine | Format-List; Write-Output \"server.js last modified:\"; \\(Get-Item \"d:\\\\intern\\\\manage and track intern progress\\\\Backend\\\\server.js\"\\).LastWriteTime)",
+      "PowerShell(Get-NetTCPConnection -LocalPort 5000 -State Listen)",
+      "Bash(curl -s -o /dev/null -w \"  http://[::1]:5000/socket.io/?EIO=4&transport=polling -> %{http_code}\\\\n\" \"http://[::1]:5000/socket.io/?EIO=4&transport=polling\")",
+      "Bash(curl -s -o /dev/null -w \"  http://127.0.0.1:5000/socket.io/?EIO=4&transport=polling -> %{http_code}\\\\n\" \"http://127.0.0.1:5000/socket.io/?EIO=4&transport=polling\")",
+      "Bash(curl -s -o /dev/null -w \"  [::1]/api/health      -> %{http_code}\\\\n\" \"http://[::1]:5000/api/health\")",
+      "Bash(curl -s -o /dev/null -w \"  127.0.0.1/api/health  -> %{http_code}\\\\n\" \"http://127.0.0.1:5000/api/health\")",
+      "PowerShell(Set-Location \"d:\\\\intern\\\\manage and track intern progress\"; Write-Output \"=== gitignore behaviour ===\"; @\\('Frontend/.env','Frontend/.env.local','Backend/.env'\\) | ForEach-Object { git check-ignore -q $_ 2>$null; if \\($LASTEXITCODE -eq 0\\) { \"  IGNORED    $_\" } else { \"  COMMITTED  $_   <-- problem\" } }; @\\('Frontend/.env.example','Backend/.env.example'\\) | ForEach-Object { git check-ignore -q $_ 2>$null; if \\($LASTEXITCODE -eq 0\\) { \"  IGNORED    $_   <-- problem\" } else { \"  COMMITTED  $_\" } })",
+      "PowerShell($l = Get-NetTCPConnection -LocalPort 5173 -State Listen -ErrorAction SilentlyContinue; if \\($l\\) { Stop-Process -Id $l[0].OwningProcess -Force -ErrorAction SilentlyContinue; Write-Output \"stopped old vite \\(config + .env changed\\)\" }; Start-Sleep -Milliseconds 900; Set-Location \"d:\\\\intern\\\\manage and track intern progress\\\\Frontend\"; npm run dev)",
+      "Bash(curl -s \"http://localhost:5173/src/api/config.js\")",
+      "Bash(curl -s -i -X OPTIONS http://localhost:5000/api/auth/login -H 'Origin: http://localhost:5173' -H 'Access-Control-Request-Method: POST' -H 'Access-Control-Request-Headers: content-type')",
+      "Bash(curl -s -i -X OPTIONS http://localhost:5000/api/auth/login -H 'Origin: http://evil.example.com' -H 'Access-Control-Request-Method: POST')"
     ]
   }
 }
