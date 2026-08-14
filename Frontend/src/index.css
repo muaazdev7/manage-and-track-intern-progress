@@ -1,17 +1,86 @@
 @import "tailwindcss";
+@import "./styles/nocturne.css";
 
-/* Design tokens — PROJECT_PLAN.md §9.
-   Tailwind v4 reads these and generates utilities from them. */
+/* ══════════════════════════════════════════════════════════════════════════
+   Nocturne → Tailwind bridge.
+
+   The app was built on Tailwind's slate/brand palettes against a light
+   ground. Rather than rewrite ~450 utility classes across every page, the
+   palettes themselves are remapped onto Nocturne's ramps:
+
+     slate-50  (page ground)  → Nocturne bg        #161826
+     white     (card surface) → Nocturne surface   #232532
+     slate-900 (primary text) → Nocturne text      #e9e9ed
+     brand-*   (accent)       → Nocturne accent ramp
+
+   The slate scale is inverted — low steps are now dark, high steps light —
+   because the app uses low steps for grounds and high steps for text. Every
+   existing component therefore repaints correctly with no markup change,
+   and the layout/logic stays exactly as it was.
+   ══════════════════════════════════════════════════════════════════════ */
+
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
     Roboto, sans-serif;
 
-  /* Indigo accent */
-  --color-brand-50: oklch(0.962 0.018 272.314);
-  --color-brand-100: oklch(0.93 0.034 272.788);
-  --color-brand-500: oklch(0.585 0.233 277.117);
-  --color-brand-600: oklch(0.511 0.262 276.966);
-  --color-brand-700: oklch(0.457 0.24 277.023);
+  /* Surfaces. `bg-white` is the card surface throughout the app. */
+  --color-white: #232532;
+
+  /* Neutrals, inverted: 50 = darkest ground, 900 = lightest text. */
+  --color-slate-50: #161826;
+  --color-slate-100: #232532;
+  --color-slate-200: #3f424d;
+  --color-slate-300: #595d6c;
+  --color-slate-400: #75798c;
+  --color-slate-500: #9397ab;
+  --color-slate-600: #b2b6ca;
+  --color-slate-700: #cfd3e5;
+  --color-slate-800: #e4e7f5;
+  --color-slate-900: #e9e9ed;
+  --color-slate-950: #f3f5fe;
+
+  /* Accent — Nocturne's blurple. Low steps are dark chip grounds, high
+     steps are light foregrounds, matching the inverted neutrals. */
+  --color-brand-50: #2b2741;
+  --color-brand-100: #423a6a;
+  --color-brand-200: #5d5294;
+  --color-brand-300: #796cbf;
+  --color-brand-400: #968ae0;
+  --color-brand-500: #9184d9;
+  --color-brand-600: #9184d9;
+  --color-brand-700: #d2cefd;
+  --color-brand-800: #e7e5fe;
+  --color-brand-900: #f5f4ff;
+
+  /* Semantic hues, retuned for a dark ground. Nocturne is monochromatic,
+     but success/warning/danger must stay distinguishable — an approved
+     task and a rejected one cannot both read as blurple. These are
+     desaturated toward the Nocturne palette so they sit with it. */
+  --color-emerald-50: #23423a;
+  --color-emerald-200: #3d6c5c;
+  --color-emerald-500: #93dcc0;
+  --color-emerald-600: #93dcc0;
+  --color-emerald-700: #bdeeda;
+
+  --color-amber-50: #4a3b24;
+  --color-amber-200: #6f5934;
+  --color-amber-400: #e8c489;
+  --color-amber-500: #e8c489;
+  --color-amber-600: #e8c489;
+  --color-amber-700: #f4dcb4;
+  --color-amber-800: #f4dcb4;
+
+  --color-red-50: #4a2b31;
+  --color-red-200: #6d4048;
+  --color-red-400: #f2a6a6;
+  --color-red-500: #f2a6a6;
+  --color-red-600: #f2a6a6;
+  --color-red-700: #f6cccc;
+
+  --color-blue-50: #2a3350;
+  --color-blue-200: #414d75;
+  --color-blue-600: #a9baf0;
+  --color-blue-700: #c7d3f7;
 }
 
 html {
@@ -19,22 +88,32 @@ html {
 }
 
 body {
-  @apply bg-slate-50 text-slate-900 font-sans antialiased;
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
 }
+
+*, *::before, *::after { box-sizing: border-box; }
 
 /* Visible keyboard focus everywhere, without the default outline on click */
+:focus { outline: none; }
 :focus-visible {
-  @apply outline-2 outline-offset-2 outline-brand-600;
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
 }
 
-/* Slimmer scrollbars in the sidebar and scroll areas */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
+/* Slimmer scrollbars, painted from the Nocturne ramp */
+::-webkit-scrollbar { width: 8px; height: 8px; }
 ::-webkit-scrollbar-thumb {
-  @apply bg-slate-300 rounded-full;
+  background: var(--color-neutral-800);
+  border-radius: 8px;
 }
-::-webkit-scrollbar-thumb:hover {
-  @apply bg-slate-400;
-}
+::-webkit-scrollbar-thumb:hover { background: var(--color-neutral-700); }
+::-webkit-scrollbar-track { background: transparent; }
+
+/* Native pickers (date inputs) must not render white-on-white in dark mode */
+input[type="date"] { color-scheme: dark; }

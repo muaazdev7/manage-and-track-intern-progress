@@ -18,9 +18,9 @@ const Input = ({
   const inputType = isPassword && revealed ? 'text' : type;
 
   return (
-    <div className={className}>
+    <div className={`field ${className}`}>
       {label && (
-        <label htmlFor={id} className="mb-1.5 block text-sm font-medium text-slate-700">
+        <label htmlFor={id}>
           {label}
           {required && <span className="ml-0.5 text-red-500">*</span>}
         </label>
@@ -36,13 +36,10 @@ const Input = ({
           type={inputType}
           aria-invalid={Boolean(error)}
           className={[
-            'w-full rounded-lg border bg-white text-sm text-slate-900',
-            'h-10 transition-colors placeholder:text-slate-400',
-            'focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20 focus:outline-none',
-            'disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-500',
-            Icon ? 'pl-9' : 'pl-3',
-            isPassword ? 'pr-10' : 'pr-3',
-            error ? 'border-red-400' : 'border-slate-300',
+            'input',
+            error ? 'input-error' : '',
+            Icon ? 'pl-10!' : '',
+            isPassword ? 'pr-10' : '',
           ].join(' ')}
           {...props}
         />
@@ -52,7 +49,7 @@ const Input = ({
             type="button"
             onClick={() => setRevealed((v) => !v)}
             aria-label={revealed ? 'Hide password' : 'Show password'}
-            className="absolute right-2 top-1/2 -translate-y-1/2 rounded p-1.5 text-slate-400 hover:text-slate-600"
+            className="absolute right-2 top-1/2 -translate-y-1/2 rounded p-1.5 text-slate-400 hover:text-slate-700"
           >
             {revealed ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
           </button>

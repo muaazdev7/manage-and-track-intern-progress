@@ -5,23 +5,23 @@ import Sidebar from './Sidebar';
 import Topbar from './Topbar';
 import useLiveInvalidate from '../../hooks/useLiveInvalidate';
 
-/** Route path → topbar title. Longest match wins. */
+/** Route path → [kicker, title] for the header, as the design lays it out. */
 const TITLES = {
-  '/admin': 'Dashboard',
-  '/admin/interns': 'Interns',
-  '/admin/tasks': 'Tasks',
-  '/admin/review': 'Review Queue',
-  '/intern': 'Dashboard',
-  '/intern/tasks': 'My Tasks',
-  '/intern/profile': 'Profile',
+  '/admin': ['Programme', 'Overview'],
+  '/admin/interns': ['Roster', 'Interns'],
+  '/admin/tasks': ['Assignments', 'Task board'],
+  '/admin/review': ['Awaiting decision', 'Review queue'],
+  '/intern': ['Your progress', 'Overview'],
+  '/intern/tasks': ['Assigned to you', 'My work'],
+  '/intern/profile': ['Your account', 'Profile'],
 };
 
-const titleFor = (pathname) => {
+const headerFor = (pathname) => {
   const match = Object.keys(TITLES)
     .filter((path) => pathname === path || pathname.startsWith(`${path}/`))
     .sort((a, b) => b.length - a.length)[0];
 
-  return TITLES[match] ?? 'InternTrack';
+  return TITLES[match] ?? ['InternTrack', 'InternTrack'];
 };
 
 const DashboardLayout = () => {
@@ -32,18 +32,21 @@ const DashboardLayout = () => {
   // page would re-register listeners on every navigation.
   useLiveInvalidate();
 
+  const [kicker, title] = headerFor(pathname);
+
   return (
     <div className="min-h-screen bg-slate-50">
       <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
-      {/* Offset matches the 240px (w-60) sidebar on desktop. */}
-      <div className="md:pl-60">
+      {/* Offset matches the 216px sidebar on desktop. */}
+      <div className="md:pl-[216px]">
         <Topbar
-          title={titleFor(pathname)}
+          title={title}
+          kicker={kicker}
           onMenuClick={() => setSidebarOpen(true)}
         />
 
-        <main className="p-4 sm:p-6">
+        <main key={pathname} className="rise-in p-4 sm:p-8">
           <Outlet />
         </main>
       </div>

@@ -39,7 +39,7 @@ const queryClient = new QueryClient({
 /** Full-screen spinner shown while the session check is in flight. */
 const BootScreen = () => (
   <div className="flex min-h-screen items-center justify-center bg-slate-50">
-    <div className="h-8 w-8 animate-spin rounded-full border-2 border-slate-200 border-t-brand-600" />
+    <div className="h-8 w-8 animate-spin rounded-full border-2 border-slate-200 border-t-[var(--color-accent)]" />
   </div>
 );
 
@@ -94,11 +94,20 @@ const App = () => (
       <SocketProvider>
         <BrowserRouter>
           <AppRoutes />
+          {/* Painted from the Nocturne tokens — the library's default is a
+              white card, which would glare against the dark ground. */}
           <Toaster
             position="top-right"
             toastOptions={{
-              style: { fontSize: '14px' },
-              success: { iconTheme: { primary: '#059669', secondary: '#fff' } },
+              style: {
+                fontSize: '14px',
+                background: 'var(--color-surface)',
+                color: 'var(--color-text)',
+                border: '1px solid var(--color-divider)',
+                boxShadow: 'var(--shadow-md)',
+              },
+              success: { iconTheme: { primary: '#93dcc0', secondary: '#232532' } },
+              error: { iconTheme: { primary: '#f2a6a6', secondary: '#232532' } },
             }}
           />
         </BrowserRouter>
