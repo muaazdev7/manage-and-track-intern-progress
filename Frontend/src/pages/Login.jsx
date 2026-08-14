@@ -198,6 +198,25 @@ const Login = () => {
           <p className="mt-4 text-center text-xs text-slate-400">
             Intern accounts are created by your admin.
           </p>
+
+          {/* Demo credentials for the seeded admin account. */}
+          <div className="mt-5 rounded-[var(--radius-md)] border border-[var(--color-divider)] p-3.5">
+            <div className="mb-2.5 text-center text-[10px] tracking-[0.14em] text-[var(--color-accent-300)] uppercase">
+              Demo credentials
+            </div>
+            <dl className="space-y-1.5 text-xs">
+              <div className="flex items-center justify-between gap-3">
+                <dt className="text-slate-400">Email</dt>
+                <dd className="font-mono text-slate-700 select-all">
+                  admin@interntrack.com
+                </dd>
+              </div>
+              <div className="flex items-center justify-between gap-3">
+                <dt className="text-slate-400">Password</dt>
+                <dd className="font-mono text-slate-700 select-all">Admin@123</dd>
+              </div>
+            </dl>
+          </div>
         </div>
       </div>
     </div>
