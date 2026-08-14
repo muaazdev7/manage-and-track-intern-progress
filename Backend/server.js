@@ -33,6 +33,14 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(morgan('dev'));
 
+
+app.get("/", (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "InternTrack Backend API is running"
+  });
+});
+
 app.get('/api/health', (req, res) => {
   res.json({ success: true, message: 'API running' });
 });
@@ -49,25 +57,15 @@ app.use(notFound);
 app.use(errorHandler);
 
 
-app.get("/", (req, res) => {
-  res.status(200).json({
-    success: true,
-    message: "InternTrack Backend API is running"
-  });
-});
-
 const PORT = process.env.PORT || 5000;
-
-
-app.listen(PORT, "0.0.0.0" , () => {
-  console.log(`Server running on port ${PORT}`);
-});
 
 const httpServer = http.createServer(app);
 
 initSocket(httpServer);
 
-httpServer.listen(PORT, () => {
-  console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
+httpServer.listen(PORT, '0.0.0.0', () => {
+  console.log(
+    `Server running in ${process.env.NODE_ENV || 'production'} mode on port ${PORT}`
+  );
   console.log('Socket.IO ready');
 });
