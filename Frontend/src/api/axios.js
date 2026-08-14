@@ -1,7 +1,15 @@
 import axios from 'axios';
 
+import { API_BASE_URL } from './config';
+
+/**
+ * VITE_API_URL is the backend ORIGIN (http://localhost:5000). Every route is
+ * mounted under /api, so the base must include it — using the bare origin
+ * turns POST /auth/login into a 404.
+ * withCredentials is what makes the browser send the httpOnly JWT cookie.
+ */
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: API_BASE_URL,
   withCredentials: true,
 });
 
